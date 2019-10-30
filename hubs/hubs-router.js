@@ -5,6 +5,17 @@ const Messages = require('../messages/messages-model.js');
 
 const router = express.Router();
 
+// this middleware checks that the id param
+// can be parsed as a number, if so then proceed
+// otherwise send a good response to client
+function isValidParamId(req, res, next) {
+  const { id } = req.params;
+  if (parseInt(id) > 0) {
+    next();
+  } else {
+    res.status(400).json({ message: 'Hub id must be valid number' });
+  }
+}
 // custom middleware
 // takes req, res (as usual)
 // takes and additional parameter next (allows the request to proceed)
@@ -46,7 +57,7 @@ router.get('/', (req, res) => {
 
 // /api/hubs/:id
 
-router.get('/:id', checkHubsId, (req, res) => {
+router.get('/:id', isValidParamId, checkHubsId, (req, res) => {
   res.json(req.hub);
 });
 
