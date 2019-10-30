@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.use((req, res, next) => {
   console.log('SOMETHING CAME INTO THE HUBS ROUTER!!!!!!!!');
-  next();
+  // next('I am being nasty and calling next with an argument!!!!!!!!');
+  throw new Error('argghhh!!!!!')
 })
 
 function checkThatReqHasBody(req, res, next) {
@@ -147,6 +148,12 @@ router.post('/:id/messages', (req, res) => {
         message: 'Error getting the messages for the hub',
       });
     });
+});
+
+router.use((err, req, res, next) => {
+  res.status(500).json({
+    message: 'Something strange happened: ' + err
+  })
 });
 
 module.exports = router;
