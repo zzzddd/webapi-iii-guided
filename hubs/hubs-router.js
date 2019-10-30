@@ -5,6 +5,14 @@ const Messages = require('../messages/messages-model.js');
 
 const router = express.Router();
 
+function checkThatReqHasBody(req, res, next) {
+  // implement
+}
+
+function checkThatBodyHasLegitName(req, res, next) {
+  // implement
+}
+
 // this middleware checks that the id param
 // can be parsed as a number, if so then proceed
 // otherwise send a good response to client
