@@ -22,7 +22,6 @@ function isValidParamId(req, res, next) {
 // let's find the hub with the given id from params
 // if it's legit, we tack it to the req object and allow to proceed
 // otherwise we send the client a 404
-
 function checkHubsId(req, res, next) {
   Hubs.findById(req.params.id)
     .then(hub => {
@@ -57,7 +56,7 @@ router.get('/', (req, res) => {
 
 // /api/hubs/:id
 
-router.get('/:id', isValidParamId, checkHubsId, (req, res) => {
+router.get('/:id', [isValidParamId, checkHubsId], (req, res) => {
   res.json(req.hub);
 });
 
@@ -75,7 +74,7 @@ router.post('/', (req, res) => {
     });
 });
 
-router.delete("/:id", checkHubsId, (req, res) => {
+router.delete("/:id", [isValidParamId, checkHubsId], (req, res) => {
   Hubs.remove(req.hub.id)
     .then(() => {
       res.status(200).json({ message: "The hub has been nuked" });
@@ -87,20 +86,14 @@ router.delete("/:id", checkHubsId, (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
-  Hubs.update(req.params.id, req.body)
+router.put('/:id', [isValidParamId, checkHubsId], (req, res) => {
+  Hubs.update(req.hub.id, req.body)
     .then(hub => {
-      if (hub) {
-        res.status(200).json(hub);
-      } else {
-        res.status(404).json({ message: 'The hub could not be found' });
-      }
+      res.status(200).json(hub);
     })
     .catch(error => {
-      // log error to server
-      console.log(error);
       res.status(500).json({
-        message: 'Error updating the hub',
+        message: 'Error updating the hub: ' + error.message,
       });
     });
 });
