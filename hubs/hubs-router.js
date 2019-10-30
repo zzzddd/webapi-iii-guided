@@ -94,6 +94,7 @@ router.post('/', checkThatReqHasBody, (req, res) => {
 router.delete("/:id", [isValidParamId, checkHubsId], (req, res) => {
   Hubs.remove(req.hub.id)
     .then(() => {
+      // throw new Error('artifitial error while deleting!');
       res.status(200).json({ message: "The hub has been nuked" });
     })
     .catch((error) => {
