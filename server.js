@@ -4,9 +4,14 @@ const hubsRouter = require('./hubs/hubs-router.js');
 
 const server = express();
 
-server.use(helmet());
+server.use(helmet()); // we need this early
 
-server.use(express.json());
+server.use(express.json()); // we need this to actually have a req.body !!!!!!!!
+
+server.use((req, res, next) => {
+  console.log('SOMETHING CAME IN!!!');
+  next();
+})
 
 server.use('/api/hubs', hubsRouter);
 

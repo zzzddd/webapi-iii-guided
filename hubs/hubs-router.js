@@ -5,6 +5,11 @@ const Messages = require('../messages/messages-model.js');
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  console.log('SOMETHING CAME INTO THE HUBS ROUTER!!!!!!!!');
+  next();
+})
+
 function checkThatReqHasBody(req, res, next) {
   if (Object.keys(req.body).length) {
     next();
