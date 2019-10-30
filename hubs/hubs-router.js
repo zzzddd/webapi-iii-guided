@@ -6,7 +6,11 @@ const Messages = require('../messages/messages-model.js');
 const router = express.Router();
 
 function checkThatReqHasBody(req, res, next) {
-  // implement
+  if (Object.keys(req.body).length) {
+    next();
+  } else {
+    res.status(400).json({ message: "Please provide a valid post to create" });
+  }
 }
 
 function checkThatBodyHasLegitName(req, res, next) {
@@ -68,7 +72,7 @@ router.get('/:id', [isValidParamId, checkHubsId], (req, res) => {
   res.json(req.hub);
 });
 
-router.post('/', (req, res) => {
+router.post('/', checkThatReqHasBody, (req, res) => {
   Hubs.add(req.body)
     .then(hub => {
       res.status(201).json(hub);
@@ -77,7 +81,7 @@ router.post('/', (req, res) => {
       // log error to server
       console.log(error);
       res.status(500).json({
-        message: 'Error adding the hub',
+        message: 'Error adding the hub: ' + error.message,
       });
     });
 });
