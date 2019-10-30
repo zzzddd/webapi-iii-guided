@@ -8,7 +8,8 @@ const router = express.Router();
 router.use((req, res, next) => {
   console.log('SOMETHING CAME INTO THE HUBS ROUTER!!!!!!!!');
   // next('I am being nasty and calling next with an argument!!!!!!!!');
-  throw new Error('argghhh!!!!!')
+  // throw new Error('argghhh!!!!!')
+  next();
 })
 
 function checkThatReqHasBody(req, res, next) {
